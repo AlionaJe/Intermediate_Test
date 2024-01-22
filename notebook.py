@@ -30,5 +30,41 @@ class NoteApp:
             for note in self.notes:
                 json_string = json.dumps(vars(note), separators=(',', ':'))
                 file.write(json_string + '\n')
+    
+    def display_notes(self):
+        if not self.notes:
+            print("No notes available.")
+        else:
+            print("{:<5} {:<20} {:<20} {}".format('ID', 'Title', 'Timestamp', 'Body'))
+            print("-" * 55)
+            for note in self.notes:
+                print("{:<5} {:<20} {:<20} {}".format(note.note_id, note.title, note.timestamp, note.body))
+
+    def add_note(self, title, body):
+        note_id = len(self.notes) + 1
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        new_note = Note(note_id, title, body, timestamp)
+        self.notes.append(new_note)
+        self.save_notes()
+        print("Note added successfully.")
+
+    def view_note(self, note_id):
+        note = next((n for n in self.notes if n.note_id == note_id), None)
+        if note:
+            print(f"Title: {note.title}\nBody: {note.body}\nTimestamp: {note.timestamp}")
+        else:
+            print("Note not found.")
+
+    def edit_note(self, note_id, new_title, new_body):
+        note = next((n for n in self.notes if n.note_id == note_id), None)
+        if note:
+            note.title = new_title
+            note.body = new_body
+            note.timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.save_notes()
+            print("Note edited successfully.")
+        else:
+            print("Note not found.")
+
 
     
