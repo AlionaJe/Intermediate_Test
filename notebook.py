@@ -24,3 +24,11 @@ class NoteApp:
     def parse_json(self, json_string):
         note_data = json.loads(json_string)
         return Note(**note_data)
+    
+    def save_notes(self):
+        with open(self.file_path, 'w') as file:
+            for note in self.notes:
+                json_string = json.dumps(vars(note), separators=(',', ':'))
+                file.write(json_string + '\n')
+
+    
