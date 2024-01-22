@@ -71,7 +71,39 @@ class NoteApp:
         self.save_notes()
         print("Note deleted successfully.")
 
-    
+if __name__ == "__main__":
+    app = NoteApp()
 
+    while True:
+        print("\nMenu:")
+        print("1. Display Notes")
+        print("2. Add Note")
+        print("3. View Note")
+        print("4. Edit Note")
+        print("5. Delete Note")
+        print("0. Exit")
 
-    
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            app.display_notes()
+        elif choice == '2':
+            title = input("Enter note title: ")
+            body = input("Enter note body: ")
+            app.add_note(title, body)
+        elif choice == '3':
+            note_id = int(input("Enter note ID to view: "))
+            app.view_note(note_id)
+        elif choice == '4':
+            note_id = int(input("Enter note ID to edit: "))
+            new_title = input("Enter new title: ")
+            new_body = input("Enter new body: ")
+            app.edit_note(note_id, new_title, new_body)
+        elif choice == '5':
+            note_id = int(input("Enter note ID to delete: "))
+            app.delete_note(note_id)
+        elif choice == '0':
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
