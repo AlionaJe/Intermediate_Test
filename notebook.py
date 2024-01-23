@@ -15,23 +15,29 @@ class NoteApp:
         self.notes = self.load_notes()
 
     def load_notes(self):
+        # Загрузка заметок из файла JSON, если файл существует
         if os.path.exists(self.file_path):
             with open(self.file_path, 'r') as file:
+                # Чтение строк из файла и преобразование каждой строки в объект Note
                 notes_data = file.read().splitlines()
                 return [self.parse_json(note_data) for note_data in notes_data]
-        return []
+        return []  # Возвращаем пустой список, если файла нет
 
     def parse_json(self, json_string):
+        # Преобразование строки JSON в объект Note
         note_data = json.loads(json_string)
         return Note(**note_data)
     
     def save_notes(self):
+        # Сохранение заметок в файл JSON
         with open(self.file_path, 'w') as file:
             for note in self.notes:
+                # Преобразование объекта Note в строку JSON и запись в файл
                 json_string = json.dumps(vars(note), separators=(',', ':'))
                 file.write(json_string + '\n')
     
     def display_notes(self):
+        # Вывод списка заметок в консоль
         if not self.notes:
             print("No notes available.")
         else:
@@ -41,6 +47,7 @@ class NoteApp:
                 print("{:<5} {:<20} {:<20} {}".format(note.note_id, note.title, note.timestamp, note.body))
 
     def add_note(self, title, body):
+        # Добавление новой заметки
         note_id = len(self.notes) + 1
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         new_note = Note(note_id, title, body, timestamp)
@@ -49,6 +56,7 @@ class NoteApp:
         print("Note added successfully.")
 
     def view_note(self, note_id):
+        # Просмотр конкретной заметки
         note = next((n for n in self.notes if n.note_id == note_id), None)
         if note:
             print(f"Title: {note.title}\nBody: {note.body}\nTimestamp: {note.timestamp}")
@@ -56,6 +64,7 @@ class NoteApp:
             print("Note not found.")
 
     def edit_note(self, note_id, new_title, new_body):
+        # Редактирование заметки
         note = next((n for n in self.notes if n.note_id == note_id), None)
         if note:
             note.title = new_title
@@ -67,6 +76,7 @@ class NoteApp:
             print("Note not found.")
 
     def delete_note(self, note_id):
+        # Удаление заметки
         self.notes = [note for note in self.notes if note.note_id != note_id]
         self.save_notes()
         print("Note deleted successfully.")
@@ -75,6 +85,7 @@ if __name__ == "__main__":
     app = NoteApp()
 
     while True:
+        # Основное меню приложения
         print("\nMenu:")
         print("1. Display Notes")
         print("2. Add Note")
@@ -85,6 +96,7 @@ if __name__ == "__main__":
 
         choice = input("Enter your choice: ")
 
+        # Обработка выбора пользователя
         if choice == '1':
             app.display_notes()
         elif choice == '2':
@@ -106,4 +118,3 @@ if __name__ == "__main__":
             break
         else:
             print("Invalid choice. Please try again.")
-
